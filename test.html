@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>TUTORIAl</title>
+
+   <script src='core.js'></script>
+   <script src='enc-base64.js'></script>
+   <script src='hmac.js'></script>
+   <script src='sha256.js'></script>
+   
+   
+   <script>
+            function getBase64Encoded(rawStr){
+                var wordArray = CryptoJS.enc.Utf8.parse(rawStr);
+                var result = CryptoJS.enc.Base64.stringify(wordArray);
+                return result;
+            }
+
+
+           
+            function doEncode(){
+                var txtEncode=document.getElementById("txtEncode").value;
+                var resultEncode=document.getElementById("resultEncode");
+                console.log(txtEncode);
+                console.log(getBase64Encoded(txtEncode));
+                resultEncode.innerText= getBase64Encoded(txtEncode.value);
+                console.log(txtEncode.value);
+            }
+
+
+           
+
+            function createJWT() {
+                var txtEncode=document.getElementById("txtHeader").value;
+                var txtEncode=document.getElementById("txtPayload").value;
+                
+                var txtEncode=document.getElementById("txtSecret").value;
+                
+                var txtEncode=document.getElementById("resultJWT").value;
+
+                var base64Header=document.getElementById(txtHeader.value);
+                var base64Payload=document.getElementById(txtPayload.value);
+                var signature = CryptoJS.HmacSHA256(base64Header + "." + base64Payload, txtSecret.value);
+                var base64Header=getBase64Encoded(txtHeader.value);
+                var base64Payload=getBase64Encoded(txtPayload.value);
+
+               
+               
+                var base64sign = CryptoJS.enc.Base64.stringify(signature);
+
+                var jwt= base64Header + "." + base64Payload + "." + base64sign;
+               
+                resultJWT.innerText=jwt;
+               
+            }
+//            {
+//                "typ":"JWT",
+//                "alg":"HS256"
+//            }
+
+//            {
+//                "iss":"ABC Service",
+//                "username":"han",
+//                "admin":false
+//            }
+
+   </script>
+
+</head>
+<body>
+    <table>
+        <tr>
+            <td>Enter a string to base54 encode: </td>
+            <td><input text="text" id="txtEncode"/></td>
+           
+            <td><button onclick="doEncode()">Encode</button> </td>
+        </tr>
+        <tr>
+            <td>Result:</td>
+            <td><span id="resultEncode"></span></td>
+        </tr>
+    </table>
+   
+    <hr>
+
+    <table>
+    <tr>
+        <td>Enter JWT header:</td>
+        <td><input type="text" id="txtHeader"/></td>
+    </tr>
+    <tr>
+        <td>Enter JWT payload:</td>
+        <td><input type="text" id="txtPayload"/></td>
+    </tr>
+    <tr>
+        <td>Enter Hash secret/password:</td>
+        <td><input type="text" id="txtSecret"/></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button onclick="createJWT()">Show JWT</button>
+        </td>
+    </tr>
+    <tr>
+        <td>Result:</td>
+        <td><div id="resultJWT" style="width:600px;overflow-wrap: break-word"></div></td>
+    </tr>
+</table>
+</body>
+</html>
+
